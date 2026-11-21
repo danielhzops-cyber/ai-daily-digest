@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{% if weekly %}{{ weekly.title }} · Week of {{ weekly.week_start | shortdate }}{% else %}This Week · {{ site.title }}{% endif %}{% endblock %}
+{% block dateline %}{% if weekly %}Week of {{ weekly.week_start | shortdate }} – {{ weekly.week_end | shortdate }}, {{ weekly.week_end[:4] }}{% elif latest %}{{ latest.date | longdate }}{% endif %}{% endblock %}
+
+{% block content %}
+{% if weekly %}
+  <article class="lead weekly-lead">
+    <p class="kicker">The week in review · {{ weekly.week_start | shortdate }} – {{ weekly.week_end | shortdate }}</p>
+    <h2 class="lead-title">{{ weekly.title }}</h2>
+    <p class="lead-summary">{{ weekly.intro }}</p>
+  </article>
+
+  {% if weekly.trends %}
+  <aside class="trends" aria-label="Key trends">
+    <h2 class="section-title"><span>Key trends</span></h2>
+    <ul>
+      {% for t in weekly.trends %}
+      <li><strong>{{ t.name }}.</strong> {{ t.description }}</li>
+      {% endfor %}
+    </ul>
+  </aside>
+  {% endif %}
+
+  <section aria-label="Most important stories">
+    <h2 class="section-title"><span>Stories of the week</span></h2>
+    <ol class="ranked">
+      {% for s in weekly.top_stories %}
+      <li class="story">
+        <h3><a href="{{ s.link }}" target="_blank" rel="noopener">{{ s.title }}</a></h3>
+        <p>{{ s.summary }}</p>
+        {% if s.why_it_matters %}<p class="why"><span>Why it matters:</span> {{ s.why_it_matters }}</p>{% endif %}
+        <p class="byline"><span class="source">{{ s.source }}</span> · {{ s.date | shortdate }} · <a href="{{ s.link }}" target="_blank" rel="noopener">Read the original&nbsp;→</a></p>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+  <p class="meta">Built from {{ weekly.days | length }} daily issues · edited by {{ weekly.model }}</p>
+{% else %}
+  <section class="empty">
+    <h2>The weekly review arrives on Monday</h2>
+    <p>Until then, here are the headlines from the last few days.</p>
+  </section>
+{% endif %}
+
+{% if recent and not weekly %}
+  <ul class="headline-list">
+    {% for d in recent %}
+    <li><a href="{{ root }}archive/{{ d.date }}.html"><span class="date">{{ d.date | shortdate }}</span> {{ d.headline.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% endblock %}

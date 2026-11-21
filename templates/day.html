@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% macro byline(item) -%}
+  <p class="byline"><span class="source">{{ item.source }}</span> · <a href="{{ item.link }}" target="_blank" rel="noopener">Read the original&nbsp;→</a></p>
+{%- endmacro %}
+
+{% block title %}{% if digest %}{{ digest.headline.title }} · {{ digest.date | longdate }}{% else %}{{ site.title }}{% endif %}{% endblock %}
+{% block dateline %}{% if digest %}{{ digest.date | longdate }}{% endif %}{% endblock %}
+
+{% block content %}
+{% if not digest %}
+  <section class="empty">
+    <h2>No issue yet</h2>
+    <p>The first edition appears after the daily job runs. You can start it by hand from the repository's <em>Actions</em> tab.</p>
+  </section>
+{% else %}
+  {% if active == 'archive' %}
+  <p class="kicker">From the archive · {{ digest.date | longdate }}</p>
+  {% endif %}
+
+  <article class="lead">
+    <p class="kicker">Headline of the day</p>
+    <h2 class="lead-title"><a href="{{ digest.headline.link }}" target="_blank" rel="noopener">{{ digest.headline.title }}</a></h2>
+    <p class="lead-summary">{{ digest.headline.summary }}</p>
+    {{ byline(digest.headline) }}
+  </article>
+
+  {% if digest.top_stories %}
+  <section class="top-stories" aria-label="Top stories">
+    <h2 class="section-title"><span>Top stories</span></h2>
+    <div class="top-grid">
+      {% for s in digest.top_stories %}
+      <article class="story">
+        <h3><a href="{{ s.link }}" target="_blank" rel="noopener">{{ s.title }}</a></h3>
+        <p>{{ s.summary }}</p>
+        {{ byline(s) }}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if digest.categories %}
+  <section class="sections" aria-label="More news by section">
+    <h2 class="section-title"><span>In other news</span></h2>
+    <div class="columns">
+      {% for c in digest.categories %}
+      <section class="category">
+        <h3 class="category-title">{{ c.name }}</h3>
+        <ul>
+          {% for s in c["items"] %}
+          <li>
+            <a class="brief-title" href="{{ s.link }}" target="_blank" rel="noopener">{{ s.title }}</a>
+            <span class="brief-summary">{{ s.summary }}</span>
+            <span class="source">{{ s.source }}</span>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <nav class="pager" aria-label="Other days">
+    {% set dir = 'archive/' if root == '' else '' %}
+    {% if prev %}<a href="{{ dir }}{{ prev.date }}.html">← {{ prev.date | shortdate }}</a>{% else %}<span></span>{% endif %}
+    {% if next %}<a href="{{ dir }}{{ next.date }}.html">{{ next.date | shortdate }} →</a>{% endif %}
+  </nav>
+  <p class="meta">{{ digest.article_count }} articles read · edited by {{ digest.model }}</p>
+{% endif %}
+{% endblock %}

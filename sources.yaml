@@ -1,0 +1,41 @@
+# RSS/Atom feeds to read every day.
+#
+# Fields:
+#   name       Shown on the site next to each story.
+#   url        The RSS or Atom feed URL.
+#   max_items  (optional) Max articles taken from this feed per day. Default 10.
+#   enabled    (optional) Set to false to pause a source without deleting it.
+#
+# Test your feeds without spending anything:  python -m digest.daily --check-sources
+
+sources:
+  # Anthropic and Meta AI don't publish official RSS feeds. These are
+  # community-maintained mirrors (github.com/Olshansk/rss-feeds) that scrape
+  # the official blogs. Swap them out if an official feed appears.
+  - name: Anthropic
+    url: https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_news.xml
+
+  - name: OpenAI
+    url: https://openai.com/news/rss.xml
+
+  - name: Google DeepMind
+    url: https://deepmind.google/blog/rss.xml
+
+  - name: Meta AI
+    url: https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_meta_ai.xml
+
+  - name: Hugging Face
+    url: https://huggingface.co/blog/feed.xml
+
+  - name: The Verge
+    url: https://www.theverge.com/rss/ai-artificial-intelligence/index.xml
+
+  - name: TechCrunch
+    url: https://techcrunch.com/category/artificial-intelligence/feed/
+
+  - name: MIT Technology Review
+    url: https://www.technologyreview.com/topic/artificial-intelligence/feed
+
+  - name: arXiv cs.AI
+    url: https://rss.arxiv.org/rss/cs.AI
+    max_items: 5

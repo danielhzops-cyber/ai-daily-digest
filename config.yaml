@@ -1,0 +1,41 @@
+# ai-daily-digest configuration
+# Edit freely. Sources live in sources.yaml.
+
+site:
+  title: "The AI Daily Digest"
+  tagline: "Artificial intelligence news, summarized every morning"
+  # Used to decide what "today" means and to print dates on the page.
+  timezone: "America/Costa_Rica"
+  # How many past issues to list on the Archive page (0 = all).
+  archive_limit: 0
+
+claude:
+  # Claude Opus 5.5. Model list:
+  # https://platform.claude.com/docs/en/about-claude/models/overview
+  # Cheaper alternative: "claude-haiku-5-5" (set prices to 0.10 / 0.50 and
+  # refusal_fallback to false).
+  model: "claude-opus-5-5"
+  # low | medium | high. Opus 5.5 always thinks a little; "low" keeps
+  # thinking (and cost) to a minimum. Raise to "medium" for sharper editing.
+  effort: "low"
+  # Hard caps on response length (thinking + JSON answer).
+  max_tokens_daily: 8000
+  max_tokens_weekly: 6000
+  # If Claude's safety filter declines a request (rare false positives on
+  # security/biology news), retry automatically on a fallback model.
+  refusal_fallback: true
+  # USD per million tokens, used only to estimate cost in the logs.
+  price_input_per_mtok: 4.00
+  price_output_per_mtok: 20.00
+
+limits:
+  # Max articles sent to Claude per day (all sources combined).
+  max_articles_per_day: 40
+  # Only articles published within this window are considered.
+  lookback_hours: 24
+  # Characters of each article's description sent to Claude.
+  excerpt_chars: 500
+  # Forget processed links after this many days (keeps seen.json small).
+  seen_retention_days: 30
+  # Days of daily digests fed into the weekly digest.
+  weekly_days: 7

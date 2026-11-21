@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Archive · {{ site.title }}{% endblock %}
+
+{% block content %}
+  <h2 class="page-title">Archive</h2>
+
+  {% if weeklies %}
+  <section aria-label="Weekly reviews">
+    <h2 class="section-title"><span>Weekly reviews</span></h2>
+    <ul class="headline-list">
+      {% for w in weeklies %}
+      <li><ahref="{{ root }}weekly/{{ w.date }}.html"><span class="date wide">{{ w.week_start | shortdate }}–{{ w.week_end | shortdate }}</span> {{ w.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section aria-label="Daily issues">
+    <h2 class="section-title"><span>Daily issues</span></h2>
+    {% if not dailies %}<p class="empty">No issues yet.</p>{% endif %}
+    {% set ns = namespace(month='') %}
+    {% for d in dailies %}
+      {% set m = d.date | monthname %}
+      {% if m != ns.month %}
+        {% if ns.month %}</ul>{% endif %}
+        <h3 class="month">{{ m }}</h3>
+        <ul class="headline-list">
+        {% set ns.month = m %}
+      {% endif %}
+      <li><a href="{{ d.date }}.html"><span class="date">{{ d.date | shortdate }}</span> {{ d.headline.title }}</a></li>
+    {% endfor %}
+    {% if ns.month %}</ul>{% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Dry-run output (sample data, never published)
+preview/
+
+# OS / editor
+.DS_Store
+.vscode/
